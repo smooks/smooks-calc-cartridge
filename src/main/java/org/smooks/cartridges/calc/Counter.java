@@ -43,16 +43,13 @@
 package org.smooks.cartridges.calc;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.smooks.SmooksException;
-import org.smooks.cdr.annotation.AppContext;
-import org.smooks.cdr.annotation.ConfigParam;
-import org.smooks.cdr.annotation.ConfigParam.Use;
 import org.smooks.container.ApplicationContext;
 import org.smooks.container.ExecutionContext;
 import org.smooks.delivery.Fragment;
-import org.smooks.delivery.annotation.Initialize;
 import org.smooks.delivery.annotation.VisitAfterIf;
 import org.smooks.delivery.annotation.VisitBeforeIf;
 import org.smooks.delivery.dom.DOMVisitAfter;
@@ -61,11 +58,15 @@ import org.smooks.delivery.ordering.Producer;
 import org.smooks.delivery.sax.SAXElement;
 import org.smooks.delivery.sax.SAXVisitAfter;
 import org.smooks.delivery.sax.SAXVisitBefore;
-import org.smooks.expression.MVELExpressionEvaluator;
+import org.smooks.expression.ExpressionEvaluator;
 import org.smooks.javabean.context.BeanContext;
 import org.smooks.javabean.repository.BeanId;
 import org.smooks.util.CollectionsUtil;
 import org.w3c.dom.Element;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * The counter can increment or decrement a value.
@@ -123,38 +124,36 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
 
     public static final int DEFAULT_AMOUNT = 1;
 
-    @ConfigParam(name = "beanId")
+    @Inject
+    @Named("beanId")
     private String beanIdName;
 
-    @ConfigParam(use = Use.OPTIONAL)
-    private Long start;
+    @Inject
+    private Optional<Long> start;
 
-    @ConfigParam(use = Use.OPTIONAL)
-    private Integer amount;
+    @Inject
+    private Optional<Integer> amount;
 
-    @ConfigParam(use = Use.OPTIONAL)
-    private MVELExpressionEvaluator amountExpression;
+    @Inject
+    private Optional<ExpressionEvaluator> amountExpression;
 
-    @ConfigParam(use = Use.OPTIONAL)
-    private MVELExpressionEvaluator startExpression;
+    @Inject
+    private Optional<ExpressionEvaluator> startExpression;
 
-    @ConfigParam(use = Use.OPTIONAL)
-    private MVELExpressionEvaluator resetCondition;
+    @Inject
+    private Optional<ExpressionEvaluator> resetCondition;
 
-    @ConfigParam(defaultVal = "INCREMENT", choice = {"INCREMENT", "DECREMENT"})
-    private String direction;
-
-    private CountDirection countDirection;
+    @Inject
+    private CountDirection direction = CountDirection.INCREMENT;
 
     private BeanId beanId;
 
-    @AppContext
+    @Inject
     private ApplicationContext appContext;
 
-    @Initialize
+    @PostConstruct
     public void initialize() {
         beanId = appContext.getBeanIdStore().register(beanIdName);
-        countDirection = CountDirection.valueOf(direction);
     }
 
     public void visitBefore(SAXElement element,
@@ -182,12 +181,12 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
     public void count(ExecutionContext executionContext, Fragment source) {
         BeanContext beanContext = executionContext.getBeanContext();
         Long value = (Long) beanContext.getBean(beanId);
-        if (value == null || (resetCondition != null && resetCondition.eval(beanContext.getBeanMap()))) {
+        if (value == null || (resetCondition.isPresent() && resetCondition.get().eval(beanContext.getBeanMap()))) {
             value = getStart(beanContext);
         } else {
             int amount = getAmount(beanContext);
 
-            if (countDirection == CountDirection.INCREMENT) {
+            if (direction == CountDirection.INCREMENT) {
                 value = value + amount;
             } else {
                 value = value - amount;
@@ -198,12 +197,12 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
 
 
     private Long getStart(BeanContext beanContext) {
-        if (start == null && startExpression == null) {
+        if (!start.isPresent() && !startExpression.isPresent()) {
             return DEFAULT_START_INDEX;
-        } else if (start != null) {
-            return start;
+        } else if (start.isPresent()) {
+            return start.get();
         } else {
-            Object result = startExpression.getValue(beanContext.getBeanMap());
+            Object result = startExpression.get().getValue(beanContext.getBeanMap());
             if (!(result instanceof Long || result instanceof Integer)) {
                 throw new SmooksException("The start expression must result in a Integer or a Long");
             }
@@ -212,13 +211,13 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
     }
 
     private int getAmount(BeanContext beanContext) {
-        if (amount == null && amountExpression == null) {
+        if (!amount.isPresent() && !amountExpression.isPresent()) {
             return DEFAULT_AMOUNT;
-        } else if (amount != null) {
-            return amount;
+        } else if (amount.isPresent()) {
+            return amount.get();
         } else {
-            Object result = amountExpression.getValue(beanContext.getBeanMap());
-            if (result instanceof Integer == false) {
+            Object result = amountExpression.get().getValue(beanContext.getBeanMap());
+            if (!(result instanceof Integer)) {
                 throw new SmooksException("The amount expression must result in a Integer");
             }
             return (Integer) result;

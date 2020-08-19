@@ -49,7 +49,11 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.smooks.cdr.SmooksResourceConfiguration;
-import org.smooks.cdr.annotation.Configurator;
+import org.smooks.cdr.injector.Scope;
+import org.smooks.cdr.lifecycle.LifecycleManager;
+import org.smooks.cdr.lifecycle.phase.PostConstructLifecyclePhase;
+import org.smooks.cdr.registry.Registry;
+import org.smooks.cdr.registry.lookup.LifecycleManagerLookup;
 import org.smooks.container.MockExecutionContext;
 import org.smooks.javabean.context.BeanContext;
 import org.testng.annotations.BeforeMethod;
@@ -73,6 +77,8 @@ public class CounterTest {
 
     private MockExecutionContext executionContext;
     private BeanContext beanContext;
+    private Registry registry;
+    private LifecycleManager lifecycleManager;
 
 
     @Test(groups = "unit")
@@ -81,7 +87,7 @@ public class CounterTest {
         config.setParameter("beanId", beanId);
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
 
         counter.visitBefore((Element) null, executionContext);
 
@@ -104,8 +110,8 @@ public class CounterTest {
         config.setParameter("amount", "10");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -133,8 +139,8 @@ public class CounterTest {
         config.setParameter("start", "100");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -156,8 +162,8 @@ public class CounterTest {
         config.setParameter("direction", "DECREMENT");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -179,8 +185,8 @@ public class CounterTest {
         config.setParameter("amountExpression", "5*5");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -203,8 +209,8 @@ public class CounterTest {
         config.setParameter("startExpression", "5*5");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -227,8 +233,8 @@ public class CounterTest {
         config.setParameter("resetCondition", "bean == 1");
 
         Counter counter = new Counter();
-        Configurator.configure(counter, config, executionContext.getContext());
-
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        
         counter.visitBefore((Element) null, executionContext);
 
         Long value = getCounterValue();
@@ -268,6 +274,8 @@ public class CounterTest {
 
         config = new SmooksResourceConfiguration(selector, Counter.class.getName());
         executionContext = new MockExecutionContext();
+        registry = executionContext.getApplicationContext().getRegistry();
+        lifecycleManager = registry.lookup(new LifecycleManagerLookup());
         beanContext = executionContext.getBeanContext();
     }
 
