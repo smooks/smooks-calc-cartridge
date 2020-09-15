@@ -42,10 +42,6 @@
  */
 package org.smooks.cartridges.calc;
 
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
-
 import org.smooks.SmooksException;
 import org.smooks.container.ApplicationContext;
 import org.smooks.container.ExecutionContext;
@@ -67,6 +63,9 @@ import org.w3c.dom.Element;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The counter can increment or decrement a value.
@@ -116,11 +115,11 @@ import javax.inject.Named;
  * @author <a href="mailto:maurice.zeijen@smies.com">maurice.zeijen@smies.com</a>
  * @since 1.1
  */
-@VisitBeforeIf(condition = "!parameters.containsKey('executeAfter') || parameters.executeAfter.value != 'true'")
-@VisitAfterIf(condition = "parameters.containsKey('executeAfter') && parameters.executeAfter.value == 'true'")
+@VisitBeforeIf(condition = "!executeAfter")
+@VisitAfterIf(condition = "executeAfter")
 public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, DOMVisitAfter, Producer {
 
-    public static final Long DEFAULT_START_INDEX = new Long(0);
+    public static final Long DEFAULT_START_INDEX = 0L;
 
     public static final int DEFAULT_AMOUNT = 1;
 
@@ -146,6 +145,9 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
     @Inject
     private CountDirection direction = CountDirection.INCREMENT;
 
+    @Inject
+    private Boolean executeAfter = false;
+    
     private BeanId beanId;
 
     @Inject
@@ -208,6 +210,10 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
             }
             return new Long(result.toString());
         }
+    }
+
+    public Boolean getExecuteAfter() {
+        return executeAfter;
     }
 
     private int getAmount(BeanContext beanContext) {
