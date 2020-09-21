@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="https://www.smooks.org/xsd/smooks/calc-1.2.xsd"
+<xs:schema targetNamespace="https://www.smooks.org/xsd/smooks/calc-2.0.xsd"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:smooks="https://www.smooks.org/xsd/smooks-1.2.xsd"
-           xmlns:smooks-calc="https://www.smooks.org/xsd/smooks/calc-1.2.xsd">
+           xmlns:smooks="https://www.smooks.org/xsd/smooks-2.0.xsd"
+           xmlns:calc="https://www.smooks.org/xsd/smooks/calc-2.0.xsd">
 
-    <xs:import namespace="https://www.smooks.org/xsd/smooks-1.2.xsd"/>
+    <xs:import namespace="https://www.smooks.org/xsd/smooks-2.0.xsd"/>
 
     <xs:annotation>
         <xs:documentation xml:lang="en">Smooks Calculation Configuration</xs:documentation>
     </xs:annotation>
 
-	<xs:element name="counter" type="smooks-calc:counter" substitutionGroup="smooks:abstract-resource-config" >
+	<xs:element name="counter" type="calc:counter" substitutionGroup="smooks:abstract-resource-config" >
     	<xs:annotation>
     		<xs:documentation xml:lang="en">
 				Counter configuration
@@ -67,13 +67,6 @@
 			    		</xs:documentation>
 			    	</xs:annotation>
     			</xs:attribute>
-    			<xs:attribute name="countOnElementNS" type="xs:string" use="optional" >
-    				<xs:annotation>
-			    		<xs:documentation xml:lang="en">
-			    			The namespace of the countOnElement element.
-			    		</xs:documentation>
-			    	</xs:annotation>
-    			</xs:attribute>
     			<xs:attribute name="beanId" type="xs:string" use="required" >
     				<xs:annotation>
 			    		<xs:documentation xml:lang="en">
@@ -96,7 +89,7 @@
 			    		</xs:documentation>
 			    	</xs:annotation>
     			</xs:attribute>
-    			<xs:attribute name="direction" type="smooks-calc:CountDirection" use="optional" default="INCREMENT">
+    			<xs:attribute name="direction" type="calc:CountDirection" use="optional" default="INCREMENT">
     				<xs:annotation>
 			    		<xs:documentation xml:lang="en">
 							The direction that the counter counts. Can be INCREMENT (default) or DECREMENT.
