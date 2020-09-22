@@ -42,10 +42,11 @@
   =========================LICENSE_END==================================
   -->
 
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:calc="https://www.smooks.org/xsd/smooks/calc-1.2.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:calc="https://www.smooks.org/xsd/smooks/calc-2.0.xsd"
+                      xmlns:x="http://x">
 
-    <calc:counter countOnElement="a" beanId="a" start="1" amount="10" countOnElementNS="http://x"/>
+    <calc:counter countOnElement="x:a" beanId="a" start="1" amount="10"/>
 
     <calc:counter countOnElement="b" beanId="b">
         <calc:startExpression>4+1</calc:startExpression>
