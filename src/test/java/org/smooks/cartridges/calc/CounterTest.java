@@ -49,11 +49,11 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.smooks.cdr.SmooksResourceConfiguration;
-import org.smooks.cdr.injector.Scope;
-import org.smooks.cdr.lifecycle.LifecycleManager;
-import org.smooks.cdr.lifecycle.phase.PostConstructLifecyclePhase;
-import org.smooks.cdr.registry.Registry;
-import org.smooks.cdr.registry.lookup.LifecycleManagerLookup;
+import org.smooks.injector.Scope;
+import org.smooks.lifecycle.LifecycleManager;
+import org.smooks.lifecycle.phase.PostConstructLifecyclePhase;
+import org.smooks.registry.Registry;
+import org.smooks.registry.lookup.LifecycleManagerLookup;
 import org.smooks.container.MockExecutionContext;
 import org.smooks.javabean.context.BeanContext;
 import org.testng.annotations.BeforeMethod;
