@@ -48,7 +48,7 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.smooks.cdr.SmooksResourceConfiguration;
+import org.smooks.cdr.ResourceConfig;
 import org.smooks.injector.Scope;
 import org.smooks.lifecycle.LifecycleManager;
 import org.smooks.lifecycle.phase.PostConstructLifecyclePhase;
@@ -72,8 +72,7 @@ public class CounterTest {
 
     private final String beanId = "bean";
 
-
-    private SmooksResourceConfiguration config;
+    private ResourceConfig resourceConfig;
 
     private MockExecutionContext executionContext;
     private BeanContext beanContext;
@@ -84,10 +83,10 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_default_count() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
+        resourceConfig.setParameter("beanId", beanId);
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
 
         counter.visitBefore((Element) null, executionContext);
 
@@ -106,11 +105,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test__static_amount() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("amount", "10");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("amount", "10");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -135,11 +134,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_static_start() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("start", "100");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("start", "100");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -158,11 +157,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_direction() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("direction", "DECREMENT");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("direction", "DECREMENT");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -181,11 +180,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_amountExpression() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("amountExpression", "5*5");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("amountExpression", "5*5");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -205,11 +204,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_startExpression() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("startExpression", "5*5");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("startExpression", "5*5");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -229,11 +228,11 @@ public class CounterTest {
     @Test(groups = "unit")
     public void test_resetCondition() throws ParserConfigurationException, SAXException, IOException {
 
-        config.setParameter("beanId", beanId);
-        config.setParameter("resetCondition", "bean == 1");
+        resourceConfig.setParameter("beanId", beanId);
+        resourceConfig.setParameter("resetCondition", "bean == 1");
 
         Counter counter = new Counter();
-        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, config, counter)));
+        lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
         counter.visitBefore((Element) null, executionContext);
 
@@ -272,7 +271,7 @@ public class CounterTest {
     @BeforeMethod(groups = "unit")
     public void init() {
 
-        config = new SmooksResourceConfiguration(selector, Counter.class.getName());
+        resourceConfig = new SmooksResourceConfiguration(selector, Counter.class.getName());
         executionContext = new MockExecutionContext();
         registry = executionContext.getApplicationContext().getRegistry();
         lifecycleManager = registry.lookup(new LifecycleManagerLookup());
