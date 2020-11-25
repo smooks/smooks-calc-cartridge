@@ -271,7 +271,7 @@ public class CounterTest {
     @BeforeMethod(groups = "unit")
     public void init() {
 
-        resourceConfig = new SmooksResourceConfiguration(selector, Counter.class.getName());
+        resourceConfig = new ResourceConfig(selector, Counter.class.getName());
         executionContext = new MockExecutionContext();
         registry = executionContext.getApplicationContext().getRegistry();
         lifecycleManager = registry.lookup(new LifecycleManagerLookup());
