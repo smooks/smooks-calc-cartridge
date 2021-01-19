@@ -42,24 +42,24 @@
  */
 package org.smooks.cartridges.calc;
 
-import static org.testng.AssertJUnit.*;
-
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.smooks.cdr.ResourceConfig;
+import org.smooks.container.MockExecutionContext;
 import org.smooks.injector.Scope;
+import org.smooks.javabean.context.BeanContext;
 import org.smooks.lifecycle.LifecycleManager;
 import org.smooks.lifecycle.phase.PostConstructLifecyclePhase;
 import org.smooks.registry.Registry;
 import org.smooks.registry.lookup.LifecycleManagerLookup;
-import org.smooks.container.MockExecutionContext;
-import org.smooks.javabean.context.BeanContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+
+import static org.testng.AssertJUnit.*;
 
 /**
  * Unit test for the Counter class
@@ -79,6 +79,10 @@ public class CounterTest {
     private Registry registry;
     private LifecycleManager lifecycleManager;
 
+    private Element element = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().createElement("foo");
+
+    public CounterTest() throws ParserConfigurationException {
+    }
 
     @Test(groups = "unit")
     public void test_default_count() throws ParserConfigurationException, SAXException, IOException {
@@ -88,13 +92,13 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(0, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -111,19 +115,19 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(0, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
         assertEquals(10, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -140,13 +144,13 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(100, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -163,13 +167,13 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(0, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -186,13 +190,13 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(0, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -210,13 +214,13 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(25, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
@@ -234,19 +238,19 @@ public class CounterTest {
         Counter counter = new Counter();
         lifecycleManager.applyPhase(counter, new PostConstructLifecyclePhase(new Scope(registry, resourceConfig, counter)));
         
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         Long value = getCounterValue();
 
         assertEquals(0, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
         assertEquals(1, value.longValue());
 
-        counter.visitBefore((Element) null, executionContext);
+        counter.visitBefore(element, executionContext);
 
         value = getCounterValue();
 
