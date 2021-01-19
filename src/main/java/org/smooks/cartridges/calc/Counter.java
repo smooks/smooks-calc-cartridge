@@ -45,11 +45,13 @@ package org.smooks.cartridges.calc;
 import org.smooks.SmooksException;
 import org.smooks.container.ApplicationContext;
 import org.smooks.container.ExecutionContext;
-import org.smooks.delivery.Fragment;
 import org.smooks.delivery.annotation.VisitAfterIf;
 import org.smooks.delivery.annotation.VisitBeforeIf;
 import org.smooks.delivery.dom.DOMVisitAfter;
 import org.smooks.delivery.dom.DOMVisitBefore;
+import org.smooks.delivery.fragment.Fragment;
+import org.smooks.delivery.fragment.NodeFragment;
+import org.smooks.delivery.fragment.SAXElementFragment;
 import org.smooks.delivery.ordering.Producer;
 import org.smooks.delivery.sax.SAXElement;
 import org.smooks.delivery.sax.SAXVisitAfter;
@@ -161,23 +163,23 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
     public void visitBefore(SAXElement element,
                             ExecutionContext executionContext) throws SmooksException,
             IOException {
-        count(executionContext, new Fragment(element));
+        count(executionContext, new SAXElementFragment(element));
     }
 
     public void visitAfter(SAXElement element, ExecutionContext executionContext)
             throws SmooksException, IOException {
-        count(executionContext, new Fragment(element));
+        count(executionContext, new SAXElementFragment(element));
     }
 
     public void visitBefore(Element element, ExecutionContext executionContext)
             throws SmooksException {
 
-        count(executionContext, new Fragment(element));
+        count(executionContext, new NodeFragment(element));
     }
 
     public void visitAfter(Element element, ExecutionContext executionContext)
             throws SmooksException {
-        count(executionContext, new Fragment(element));
+        count(executionContext, new NodeFragment(element));
     }
 
     public void count(ExecutionContext executionContext, Fragment source) {
