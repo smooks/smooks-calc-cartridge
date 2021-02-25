@@ -42,18 +42,18 @@
  */
 package org.smooks.cartridges.calc;
 
-import static org.testng.AssertJUnit.*;
-
-import java.io.IOException;
+import org.smooks.Smooks;
+import org.smooks.api.ExecutionContext;
+import org.smooks.io.payload.JavaResult;
+import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
-import org.smooks.Smooks;
-import org.smooks.container.ExecutionContext;
-import org.smooks.payload.JavaResult;
-import org.testng.annotations.Test;
-import org.xml.sax.SAXException;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * Unit test for the extended configuration of the Counter class

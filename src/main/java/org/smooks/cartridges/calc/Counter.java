@@ -42,24 +42,24 @@
  */
 package org.smooks.cartridges.calc;
 
-import org.smooks.SmooksException;
-import org.smooks.container.ApplicationContext;
-import org.smooks.container.ExecutionContext;
-import org.smooks.delivery.annotation.VisitAfterIf;
-import org.smooks.delivery.annotation.VisitBeforeIf;
-import org.smooks.delivery.dom.DOMVisitAfter;
-import org.smooks.delivery.dom.DOMVisitBefore;
-import org.smooks.delivery.fragment.Fragment;
-import org.smooks.delivery.fragment.NodeFragment;
-import org.smooks.delivery.fragment.SAXElementFragment;
-import org.smooks.delivery.ordering.Producer;
-import org.smooks.delivery.sax.SAXElement;
-import org.smooks.delivery.sax.SAXVisitAfter;
-import org.smooks.delivery.sax.SAXVisitBefore;
-import org.smooks.expression.ExpressionEvaluator;
-import org.smooks.javabean.context.BeanContext;
-import org.smooks.javabean.repository.BeanId;
-import org.smooks.util.CollectionsUtil;
+import org.smooks.api.ApplicationContext;
+import org.smooks.api.ExecutionContext;
+import org.smooks.api.SmooksException;
+import org.smooks.api.bean.context.BeanContext;
+import org.smooks.api.bean.repository.BeanId;
+import org.smooks.api.delivery.fragment.Fragment;
+import org.smooks.api.delivery.ordering.Producer;
+import org.smooks.api.delivery.sax.SAXElement;
+import org.smooks.api.expression.ExpressionEvaluator;
+import org.smooks.api.resource.visitor.VisitAfterIf;
+import org.smooks.api.resource.visitor.VisitBeforeIf;
+import org.smooks.api.resource.visitor.dom.DOMVisitAfter;
+import org.smooks.api.resource.visitor.dom.DOMVisitBefore;
+import org.smooks.api.resource.visitor.sax.SAXVisitAfter;
+import org.smooks.api.resource.visitor.sax.SAXVisitBefore;
+import org.smooks.engine.delivery.fragment.NodeFragment;
+import org.smooks.engine.delivery.fragment.SAXElementFragment;
+import org.smooks.support.CollectionsUtil;
 import org.w3c.dom.Element;
 
 import javax.annotation.PostConstruct;
@@ -182,7 +182,7 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
         count(executionContext, new NodeFragment(element));
     }
 
-    public void count(ExecutionContext executionContext, Fragment source) {
+    public void count(ExecutionContext executionContext, Fragment<?> source) {
         BeanContext beanContext = executionContext.getBeanContext();
         Long value = (Long) beanContext.getBean(beanId);
         if (value == null || (resetCondition.isPresent() && resetCondition.get().eval(beanContext.getBeanMap()))) {
