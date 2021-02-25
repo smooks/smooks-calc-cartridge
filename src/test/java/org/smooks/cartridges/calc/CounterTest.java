@@ -42,14 +42,15 @@
  */
 package org.smooks.cartridges.calc;
 
-import org.smooks.cdr.ResourceConfig;
-import org.smooks.container.MockExecutionContext;
-import org.smooks.injector.Scope;
-import org.smooks.javabean.context.BeanContext;
-import org.smooks.lifecycle.LifecycleManager;
-import org.smooks.lifecycle.phase.PostConstructLifecyclePhase;
-import org.smooks.registry.Registry;
-import org.smooks.registry.lookup.LifecycleManagerLookup;
+import org.smooks.api.Registry;
+import org.smooks.api.bean.context.BeanContext;
+import org.smooks.api.lifecycle.LifecycleManager;
+import org.smooks.api.resource.config.ResourceConfig;
+import org.smooks.engine.injector.Scope;
+import org.smooks.engine.lifecycle.PostConstructLifecyclePhase;
+import org.smooks.engine.lookup.LifecycleManagerLookup;
+import org.smooks.engine.resource.config.DefaultResourceConfig;
+import org.smooks.tck.MockExecutionContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.w3c.dom.Element;
@@ -274,8 +275,7 @@ public class CounterTest {
 
     @BeforeMethod(groups = "unit")
     public void init() {
-
-        resourceConfig = new ResourceConfig(selector, Counter.class.getName());
+        resourceConfig = new DefaultResourceConfig(selector, Counter.class.getName());
         executionContext = new MockExecutionContext();
         registry = executionContext.getApplicationContext().getRegistry();
         lifecycleManager = registry.lookup(new LifecycleManagerLookup());
