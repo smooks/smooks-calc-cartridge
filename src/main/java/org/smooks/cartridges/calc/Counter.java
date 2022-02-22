@@ -49,23 +49,20 @@ import org.smooks.api.bean.context.BeanContext;
 import org.smooks.api.bean.repository.BeanId;
 import org.smooks.api.delivery.fragment.Fragment;
 import org.smooks.api.delivery.ordering.Producer;
-import org.smooks.api.delivery.sax.SAXElement;
 import org.smooks.api.expression.ExpressionEvaluator;
 import org.smooks.api.resource.visitor.VisitAfterIf;
 import org.smooks.api.resource.visitor.VisitBeforeIf;
 import org.smooks.api.resource.visitor.dom.DOMVisitAfter;
 import org.smooks.api.resource.visitor.dom.DOMVisitBefore;
-import org.smooks.api.resource.visitor.sax.SAXVisitAfter;
-import org.smooks.api.resource.visitor.sax.SAXVisitBefore;
+import org.smooks.api.resource.visitor.sax.ng.AfterVisitor;
+import org.smooks.api.resource.visitor.sax.ng.BeforeVisitor;
 import org.smooks.engine.delivery.fragment.NodeFragment;
-import org.smooks.engine.delivery.fragment.SAXElementFragment;
 import org.smooks.support.CollectionsUtil;
 import org.w3c.dom.Element;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -119,7 +116,7 @@ import java.util.Set;
  */
 @VisitBeforeIf(condition = "!executeAfter")
 @VisitAfterIf(condition = "executeAfter")
-public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, DOMVisitAfter, Producer {
+public class Counter implements BeforeVisitor, AfterVisitor, DOMVisitBefore, DOMVisitAfter, Producer {
 
     public static final Long DEFAULT_START_INDEX = 0L;
 
@@ -160,23 +157,15 @@ public class Counter implements SAXVisitBefore, SAXVisitAfter, DOMVisitBefore, D
         beanId = appContext.getBeanIdStore().register(beanIdName);
     }
 
-    public void visitBefore(SAXElement element,
-                            ExecutionContext executionContext) throws SmooksException,
-            IOException {
-        count(executionContext, new SAXElementFragment(element));
-    }
 
-    public void visitAfter(SAXElement element, ExecutionContext executionContext)
-            throws SmooksException, IOException {
-        count(executionContext, new SAXElementFragment(element));
-    }
-
+    @Override
     public void visitBefore(Element element, ExecutionContext executionContext)
             throws SmooksException {
 
         count(executionContext, new NodeFragment(element));
     }
 
+    @Override
     public void visitAfter(Element element, ExecutionContext executionContext)
             throws SmooksException {
         count(executionContext, new NodeFragment(element));
