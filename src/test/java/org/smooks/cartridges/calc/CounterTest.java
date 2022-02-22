@@ -59,6 +59,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Properties;
 
 import static org.testng.AssertJUnit.*;
 
@@ -275,7 +276,7 @@ public class CounterTest {
 
     @BeforeMethod(groups = "unit")
     public void init() {
-        resourceConfig = new DefaultResourceConfig(selector, Counter.class.getName());
+        resourceConfig = new DefaultResourceConfig(selector, new Properties(), Counter.class.getName());
         executionContext = new MockExecutionContext();
         registry = executionContext.getApplicationContext().getRegistry();
         lifecycleManager = registry.lookup(new LifecycleManagerLookup());
