@@ -57,7 +57,6 @@ import org.smooks.api.resource.visitor.dom.DOMVisitBefore;
 import org.smooks.api.resource.visitor.sax.ng.AfterVisitor;
 import org.smooks.api.resource.visitor.sax.ng.BeforeVisitor;
 import org.smooks.engine.delivery.fragment.NodeFragment;
-import org.smooks.support.CollectionsUtil;
 import org.w3c.dom.Element;
 
 import jakarta.annotation.PostConstruct;
@@ -65,6 +64,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The counter can increment or decrement a value.
@@ -146,7 +147,7 @@ public class Counter implements BeforeVisitor, AfterVisitor, DOMVisitBefore, DOM
 
     @Inject
     private Boolean executeAfter = false;
-    
+
     private BeanId beanId;
 
     @Inject
@@ -222,6 +223,6 @@ public class Counter implements BeforeVisitor, AfterVisitor, DOMVisitBefore, DOM
     }
 
     public Set<? extends Object> getProducts() {
-        return CollectionsUtil.toSet(beanIdName);
+        return Stream.of(beanIdName).collect(Collectors.toSet());
     }
 }
