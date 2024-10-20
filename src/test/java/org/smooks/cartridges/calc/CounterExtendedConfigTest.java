@@ -44,12 +44,12 @@ package org.smooks.cartridges.calc;
 
 import org.smooks.Smooks;
 import org.smooks.api.ExecutionContext;
-import org.smooks.io.payload.JavaResult;
+import org.smooks.io.sink.JavaSink;
+import org.smooks.io.source.StreamSource;
 import org.testng.annotations.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -69,17 +69,17 @@ public class CounterExtendedConfigTest {
 
 		ExecutionContext executionContext = smooks.createExecutionContext();
 
-		JavaResult result = new JavaResult();
+		JavaSink sink = new JavaSink();
 
-		smooks.filterSource(executionContext, new StreamSource(getClass().getResourceAsStream("/test.xml")), result);
+		smooks.filterSource(executionContext, new StreamSource(getClass().getResourceAsStream("/test.xml")), sink);
 
-		Long a = (Long) result.getBean("a");
+		Long a = (Long) sink.getBean("a");
 
 		assertNotNull(a);
 
 		assertEquals(21, a.longValue());
 
-		Long b = (Long) result.getBean("b");
+		Long b = (Long) sink.getBean("b");
 
 		assertNotNull(b);
 
